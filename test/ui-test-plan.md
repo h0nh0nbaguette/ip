@@ -111,3 +111,51 @@ Here are the tasks in your list:
 1.[T][ ] valid task
 Bye. Hope to see you again soon!
 ```
+
+## TC4 - Delete tasks from the collection
+
+Aim: Verify that deletion removes the selected task, renumbers the list, reports the new size, and rejects bad indices.
+
+Inputs:
+
+```text
+todo first task
+deadline second task /by tomorrow
+event third task /from 2pm /to 3pm
+delete 2
+delete 3
+list
+delete 1
+delete 1
+bye
+```
+
+Expected output:
+
+```text
+Hello! I'm Nori.
+What can I do for you?
+Got it. I've added this task:
+  [T][ ] first task
+Now you have 1 task in the list.
+Got it. I've added this task:
+  [D][ ] second task (by: tomorrow)
+Now you have 2 tasks in the list.
+Got it. I've added this task:
+  [E][ ] third task (from: 2pm to: 3pm)
+Now you have 3 tasks in the list.
+Noted. I've removed this task:
+  [D][ ] second task (by: tomorrow)
+Now you have 2 tasks in the list.
+OOPS!!! That task number is not in your list.
+Here are the tasks in your list:
+1.[T][ ] first task
+2.[E][ ] third task (from: 2pm to: 3pm)
+Noted. I've removed this task:
+  [T][ ] first task
+Now you have 1 task in the list.
+Noted. I've removed this task:
+  [E][ ] third task (from: 2pm to: 3pm)
+Now you have 0 tasks in the list.
+Bye. Hope to see you again soon!
+```

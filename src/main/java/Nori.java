@@ -1,10 +1,10 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
  * Entry point for Nori, a command-line task assistant.
  */
 public class Nori {
-    private static final int MAX_TASKS = 100;
     private static final String DIVIDER = "____________________________________________________________";
     private static final String BANNER = " _   _            _ \n"
             + "| \\ | | ___  _ __(_) \n"
@@ -19,8 +19,7 @@ public class Nori {
      */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Task[] tasks = new Task[MAX_TASKS];
-        int taskCount = 0;
+        ArrayList<Task> tasks = new ArrayList<>();
         System.out.println(DIVIDER);
         System.out.println(BANNER);
         System.out.println("Hello! I'm Nori.");
@@ -37,29 +36,32 @@ public class Nori {
                     throw new NoriException("Please enter a command.");
                 } else if (command.equals("list")) {
                     System.out.println("Here are the tasks in your list:");
-                    for (int i = 0; i < taskCount; i++) {
-                        System.out.println((i + 1) + "." + tasks[i]);
+                    for (int i = 0; i < tasks.size(); i++) {
+                        System.out.println((i + 1) + "." + tasks.get(i));
                     }
                 } else if (command.equals("mark") || command.startsWith("mark ")) {
-                    int taskIndex = parseTaskIndex(command, "mark", taskCount);
-                    tasks[taskIndex].markAsDone();
+                    int taskIndex = parseTaskIndex(command, "mark", tasks.size());
+                    tasks.get(taskIndex).markAsDone();
                     System.out.println("Nice! I've marked this task as done:");
-                    System.out.println("  " + tasks[taskIndex]);
+                    System.out.println("  " + tasks.get(taskIndex));
                 } else if (command.equals("unmark") || command.startsWith("unmark ")) {
-                    int taskIndex = parseTaskIndex(command, "unmark", taskCount);
-                    tasks[taskIndex].markAsNotDone();
+                    int taskIndex = parseTaskIndex(command, "unmark", tasks.size());
+                    tasks.get(taskIndex).markAsNotDone();
                     System.out.println("OK, I've marked this task as not done yet:");
-                    System.out.println("  " + tasks[taskIndex]);
+                    System.out.println("  " + tasks.get(taskIndex));
+                } else if (command.equals("delete") || command.startsWith("delete ")) {
+                    int taskIndex = parseTaskIndex(command, "delete", tasks.size());
+                    Task removedTask = tasks.remove(taskIndex);
+                    System.out.println("Noted. I've removed this task:");
+                    System.out.println("  " + removedTask);
+                    System.out.println("Now you have " + tasks.size() + (tasks.size() == 1
+                            ? " task in the list." : " tasks in the list."));
                 } else if (isTaskCommand(command)) {
-                    if (taskCount == MAX_TASKS) {
-                        throw new NoriException("Your task list is full.");
-                    }
                     Task task = parseTask(command);
-                    tasks[taskCount] = task;
-                    taskCount++;
+                    tasks.add(task);
                     System.out.println("Got it. I've added this task:");
                     System.out.println("  " + task);
-                    System.out.println("Now you have " + taskCount + (taskCount == 1
+                    System.out.println("Now you have " + tasks.size() + (tasks.size() == 1
                             ? " task in the list." : " tasks in the list."));
                 } else {
                     throw new NoriException("I don't know that command.");
