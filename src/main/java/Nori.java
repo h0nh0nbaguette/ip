@@ -4,6 +4,7 @@ import java.util.Scanner;
  * Entry point for Nori, a command-line task assistant.
  */
 public class Nori {
+    private static final int MAX_TASKS = 100;
     private static final String DIVIDER = "____________________________________________________________";
     private static final String BANNER = " _   _            _ \n"
             + "| \\ | | ___  _ __(_) \n"
@@ -18,6 +19,8 @@ public class Nori {
      */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        String[] tasks = new String[MAX_TASKS];
+        int taskCount = 0;
         System.out.println(DIVIDER);
         System.out.println(BANNER);
         System.out.println("Hello! I'm Nori.");
@@ -29,7 +32,15 @@ public class Nori {
             if (command.equals("bye")) {
                 break;
             }
-            System.out.println(command);
+            if (command.equals("list")) {
+                for (int i = 0; i < taskCount; i++) {
+                    System.out.println((i + 1) + ". " + tasks[i]);
+                }
+            } else {
+                tasks[taskCount] = command;
+                taskCount++;
+                System.out.println("added: " + command);
+            }
             System.out.println(DIVIDER);
         }
 
