@@ -28,43 +28,49 @@ public class Nori {
 
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine().trim();
-            if (command.equals("bye")) {
+            CommandType commandType = CommandType.from(command);
+            if (commandType == CommandType.BYE) {
                 break;
             }
             try {
-                if (command.isEmpty()) {
-                    throw new NoriException("Please enter a command.");
-                } else if (command.equals("list")) {
+                switch (commandType) {
+                case EMPTY -> throw new NoriException("Please enter a command.");
+                case LIST -> {
                     System.out.println("Here are the tasks in your list:");
                     for (int i = 0; i < tasks.size(); i++) {
                         System.out.println((i + 1) + "." + tasks.get(i));
                     }
-                } else if (command.equals("mark") || command.startsWith("mark ")) {
+                }
+                case MARK -> {
                     int taskIndex = parseTaskIndex(command, "mark", tasks.size());
                     tasks.get(taskIndex).markAsDone();
                     System.out.println("Nice! I've marked this task as done:");
                     System.out.println("  " + tasks.get(taskIndex));
-                } else if (command.equals("unmark") || command.startsWith("unmark ")) {
+                }
+                case UNMARK -> {
                     int taskIndex = parseTaskIndex(command, "unmark", tasks.size());
                     tasks.get(taskIndex).markAsNotDone();
                     System.out.println("OK, I've marked this task as not done yet:");
                     System.out.println("  " + tasks.get(taskIndex));
-                } else if (command.equals("delete") || command.startsWith("delete ")) {
+                }
+                case DELETE -> {
                     int taskIndex = parseTaskIndex(command, "delete", tasks.size());
                     Task removedTask = tasks.remove(taskIndex);
                     System.out.println("Noted. I've removed this task:");
                     System.out.println("  " + removedTask);
                     System.out.println("Now you have " + tasks.size() + (tasks.size() == 1
                             ? " task in the list." : " tasks in the list."));
-                } else if (isTaskCommand(command)) {
+                }
+                case TODO, DEADLINE, EVENT -> {
                     Task task = parseTask(command);
                     tasks.add(task);
                     System.out.println("Got it. I've added this task:");
                     System.out.println("  " + task);
                     System.out.println("Now you have " + tasks.size() + (tasks.size() == 1
                             ? " task in the list." : " tasks in the list."));
-                } else {
-                    throw new NoriException("I don't know that command.");
+                }
+                case UNKNOWN -> throw new NoriException("I don't know that command.");
+                case BYE -> throw new AssertionError("bye should be handled before the command switch");
                 }
             } catch (NoriException exception) {
                 System.out.println("OOPS!!! " + exception.getMessage());
@@ -74,12 +80,6 @@ public class Nori {
 
         System.out.println("Bye. Hope to see you again soon!");
         System.out.println(DIVIDER);
-    }
-
-    private static boolean isTaskCommand(String command) {
-        return command.equals("todo") || command.startsWith("todo ")
-                || command.equals("deadline") || command.startsWith("deadline ")
-                || command.equals("event") || command.startsWith("event ");
     }
 
     private static Task parseTask(String command) throws NoriException {

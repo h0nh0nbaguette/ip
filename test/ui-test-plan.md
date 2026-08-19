@@ -159,3 +159,25 @@ Noted. I've removed this task:
 Now you have 0 tasks in the list.
 Bye. Hope to see you again soon!
 ```
+
+## TC5 - Reject commands with unexpected arguments
+
+Aim: Verify that enum-based command routing does not accept extra arguments for argument-free commands.
+
+Inputs:
+
+```text
+list extra
+bye extra
+bye
+```
+
+Expected output:
+
+```text
+Hello! I'm Nori.
+What can I do for you?
+OOPS!!! I don't know that command.
+OOPS!!! I don't know that command.
+Bye. Hope to see you again soon!
+```
