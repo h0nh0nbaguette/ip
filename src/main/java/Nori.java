@@ -33,8 +33,9 @@ public class Nori {
                 break;
             }
             if (command.equals("list")) {
+                System.out.println("Here are the tasks in your list:");
                 for (int i = 0; i < taskCount; i++) {
-                    System.out.println((i + 1) + ". " + tasks[i]);
+                    System.out.println((i + 1) + "." + tasks[i]);
                 }
             } else if (command.startsWith("mark ")) {
                 int taskIndex = Integer.parseInt(command.substring(5)) - 1;
@@ -47,9 +48,26 @@ public class Nori {
                 System.out.println("OK, I've marked this task as not done yet:");
                 System.out.println("  " + tasks[taskIndex]);
             } else {
-                tasks[taskCount] = new Task(command);
+                Task task;
+                if (command.startsWith("todo ")) {
+                    task = new Todo(command.substring(5));
+                } else if (command.startsWith("deadline ")) {
+                    int byIndex = command.indexOf(" /by ");
+                    task = new Deadline(command.substring(9, byIndex), command.substring(byIndex + 5));
+                } else if (command.startsWith("event ")) {
+                    int fromIndex = command.indexOf(" /from ");
+                    int toIndex = command.indexOf(" /to ");
+                    task = new Event(command.substring(6, fromIndex),
+                            command.substring(fromIndex + 7, toIndex), command.substring(toIndex + 5));
+                } else {
+                    task = new Todo(command);
+                }
+                tasks[taskCount] = task;
                 taskCount++;
-                System.out.println("added: " + command);
+                System.out.println("Got it. I've added this task:");
+                System.out.println("  " + task);
+                System.out.println("Now you have " + taskCount + (taskCount == 1
+                        ? " task in the list." : " tasks in the list."));
             }
             System.out.println(DIVIDER);
         }
