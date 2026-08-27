@@ -33,7 +33,7 @@ public class Storage {
      * @return tasks stored in the data file
      * @throws NoriException if the file cannot be read or contains invalid data
      */
-    public ArrayList<Task> load() throws NoriException {
+    public TaskList load() throws NoriException {
         createDataFileIfMissing();
         final List<String> lines;
         try {
@@ -42,7 +42,7 @@ public class Storage {
             throw new NoriException("I couldn't read the task data file.");
         }
 
-        ArrayList<Task> tasks = new ArrayList<>();
+        TaskList tasks = new TaskList();
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
             if (line.isBlank()) {
@@ -63,7 +63,7 @@ public class Storage {
      * @param tasks tasks to persist
      * @throws NoriException if the data file cannot be written
      */
-    public void save(List<Task> tasks) throws NoriException {
+    public void save(TaskList tasks) throws NoriException {
         createParentDirectory();
         ArrayList<String> lines = new ArrayList<>();
         for (Task task : tasks) {
