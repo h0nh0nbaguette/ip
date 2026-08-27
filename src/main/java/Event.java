@@ -18,6 +18,24 @@ public class Event extends Task {
         this.to = to;
     }
 
+    /**
+     * Returns the event start text.
+     *
+     * @return start text supplied by the user
+     */
+    public String getFrom() {
+        return from;
+    }
+
+    /**
+     * Returns the event end text.
+     *
+     * @return end text supplied by the user
+     */
+    public String getTo() {
+        return to;
+    }
+
     @Override
     public String toString() {
         return "[E]" + super.toString() + " (from: " + from + " to: " + to + ")";
