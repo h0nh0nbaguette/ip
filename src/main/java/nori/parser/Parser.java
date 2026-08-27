@@ -87,6 +87,21 @@ public class Parser {
         return taskNumber - 1;
     }
 
+    /**
+     * Extracts the keyword from a find command.
+     *
+     * @param command complete find command.
+     * @return keyword to match against task descriptions
+     * @throws NoriException if the keyword is empty
+     */
+    public String parseFindKeyword(String command) throws NoriException {
+        String keyword = command.substring("find".length()).trim();
+        if (keyword.isEmpty()) {
+            throw new NoriException("Please provide a keyword after find.");
+        }
+        return keyword;
+    }
+
     /** Parses a deadline command and validates its date and time. */
     private Deadline parseDeadline(String command) throws NoriException {
         int byIndex = command.indexOf(" /by ");

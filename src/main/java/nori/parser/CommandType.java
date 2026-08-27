@@ -9,6 +9,7 @@ public enum CommandType {
     MARK,
     UNMARK,
     DELETE,
+    FIND,
     TODO,
     DEADLINE,
     EVENT,
@@ -32,6 +33,7 @@ public enum CommandType {
         case "mark" -> MARK;
         case "unmark" -> UNMARK;
         case "delete" -> DELETE;
+        case "find" -> FIND;
         case "todo" -> TODO;
         case "deadline" -> DEADLINE;
         case "event" -> EVENT;
