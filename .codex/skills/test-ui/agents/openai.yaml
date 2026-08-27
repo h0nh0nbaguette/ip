@@ -1,4 +1,0 @@
-interface:
-  display_name: "Test Nori UI"
-  short_description: "Run repeatable command-line UI tests"
-  default_prompt: "Use $test-ui to run the Nori command-line test plan."
