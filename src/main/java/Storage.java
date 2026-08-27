@@ -3,6 +3,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -109,7 +112,7 @@ public class Storage {
         }
         if (task instanceof Deadline deadline) {
             return String.join(FIELD_SEPARATOR, "D", completionState, description,
-                    encode(deadline.getBy()));
+                    encode(deadline.getBy().toString()), encode(deadline.getTime().toString()));
         }
         if (task instanceof Event event) {
             return String.join(FIELD_SEPARATOR, "E", completionState, description,
@@ -131,8 +134,8 @@ public class Storage {
             yield new Todo(decode(fields[2]));
         }
         case "D" -> {
-            requireFieldCount(fields, 4);
-            yield new Deadline(decode(fields[2]), decode(fields[3]));
+            requireFieldCount(fields, 5);
+            yield new Deadline(decode(fields[2]), parseDate(fields[3]), parseTime(fields[4]));
         }
         case "E" -> {
             requireFieldCount(fields, 5);
@@ -147,6 +150,24 @@ public class Storage {
             throw new NoriException("A stored task has an invalid completion state.");
         }
         return task;
+    }
+
+    /** Converts an encoded ISO date into a deadline date. */
+    private LocalDate parseDate(String value) throws NoriException {
+        try {
+            return LocalDate.parse(decode(value));
+        } catch (DateTimeParseException exception) {
+            throw new NoriException("A stored deadline has an invalid date.");
+        }
+    }
+
+    /** Converts an encoded ISO time into a deadline time. */
+    private LocalTime parseTime(String value) throws NoriException {
+        try {
+            return LocalTime.parse(decode(value));
+        } catch (DateTimeParseException exception) {
+            throw new NoriException("A stored deadline has an invalid time.");
+        }
     }
 
     /** Verifies the number of fields used by a stored task type. */

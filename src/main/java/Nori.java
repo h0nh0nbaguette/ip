@@ -1,4 +1,8 @@
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -13,6 +17,10 @@ public class Nori {
             + "| |\\  | (_) | |  | |\n"
             + "|_| \\_|\\___/|_|  |_|\n";
     private static final Path DATA_FILE_PATH = Path.of("data", "nori.txt");
+    private static final DateTimeFormatter ISO_DATE_TIME_INPUT_FORMAT =
+            DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm").withResolverStyle(ResolverStyle.STRICT);
+    private static final DateTimeFormatter SLASH_DATE_TIME_INPUT_FORMAT =
+            DateTimeFormatter.ofPattern("d/M/uuuu HHmm").withResolverStyle(ResolverStyle.STRICT);
 
     /**
      * Greets the user, manages tasks, and exits when the user enters {@code bye}.
@@ -117,19 +125,20 @@ public class Nori {
             return new Todo(description);
         }
         if (command.equals("deadline")) {
-            throw new NoriException("Use: deadline DESCRIPTION /by DATE_OR_TIME");
+            throw new NoriException("Use: deadline DESCRIPTION /by yyyy-MM-dd HHmm or d/M/yyyy HHmm");
         }
         if (command.startsWith("deadline ")) {
             int byIndex = command.indexOf(" /by ");
             if (byIndex < 0) {
-                throw new NoriException("Use: deadline DESCRIPTION /by DATE_OR_TIME");
+                throw new NoriException(
+                        "Use: deadline DESCRIPTION /by yyyy-MM-dd HHmm or d/M/yyyy HHmm");
             }
             String description = byIndex < 9 ? "" : command.substring(9, byIndex).trim();
             String by = command.substring(byIndex + 5).trim();
             if (description.isEmpty() || by.isEmpty()) {
                 throw new NoriException("A deadline needs both a description and /by value.");
             }
-            return new Deadline(description, by);
+            return parseDeadline(description, by);
         }
         if (command.equals("event")) {
             throw new NoriException("Use: event DESCRIPTION /from START /to END");
@@ -146,6 +155,29 @@ public class Nori {
             throw new NoriException("An event needs a description, /from value, and /to value.");
         }
         return new Event(description, from, to);
+    }
+
+    /**
+     * Parses a deadline in either the date-only or date-time input format.
+     *
+     * @param description deadline description
+     * @param byText deadline date or date-time text
+     * @return parsed deadline
+     * @throws NoriException if the deadline text is not a valid supported format
+     */
+    private static Deadline parseDeadline(String description, String byText) throws NoriException {
+        try {
+            LocalDateTime dateTime = LocalDateTime.parse(byText, ISO_DATE_TIME_INPUT_FORMAT);
+            return new Deadline(description, dateTime.toLocalDate(), dateTime.toLocalTime());
+        } catch (DateTimeParseException exception) {
+            try {
+                LocalDateTime dateTime = LocalDateTime.parse(byText, SLASH_DATE_TIME_INPUT_FORMAT);
+                return new Deadline(description, dateTime.toLocalDate(), dateTime.toLocalTime());
+            } catch (DateTimeParseException nestedException) {
+                throw new NoriException(
+                        "Use yyyy-MM-dd HHmm or d/M/yyyy HHmm for deadline dates and times.");
+            }
+        }
     }
 
     private static int parseTaskIndex(String command, String commandWord, int taskCount)
