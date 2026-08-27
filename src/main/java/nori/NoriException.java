@@ -1,3 +1,5 @@
+package nori;
+
 /**
  * Represents an input error that can be explained to the user and recovered from.
  */

@@ -1,4 +1,9 @@
+package nori.ui;
+
 import java.util.Scanner;
+
+import nori.task.Task;
+import nori.task.TaskList;
 
 /**
  * Reads commands from the user and displays Nori's responses.

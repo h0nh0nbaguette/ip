@@ -1,3 +1,5 @@
+package nori.parser;
+
 /**
  * Identifies the operation requested by the first word of a user command.
  */

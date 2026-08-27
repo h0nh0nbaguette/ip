@@ -1,4 +1,13 @@
+package nori;
+
 import java.nio.file.Path;
+
+import nori.parser.CommandType;
+import nori.parser.Parser;
+import nori.storage.Storage;
+import nori.task.Task;
+import nori.task.TaskList;
+import nori.ui.Ui;
 
 /**
  * Coordinates Nori's user interface, command parsing, task list, and storage.
