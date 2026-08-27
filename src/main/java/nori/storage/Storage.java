@@ -30,7 +30,7 @@ public class Storage {
     /**
      * Creates storage backed by the given file.
      *
-     * @param filePath relative or absolute path to the task data file
+     * @param filePath relative or absolute path to the task data file.
      */
     public Storage(Path filePath) {
         this.filePath = filePath;
@@ -69,7 +69,7 @@ public class Storage {
     /**
      * Replaces the data file contents with the current task list.
      *
-     * @param tasks tasks to persist
+     * @param tasks tasks to persist.
      * @throws NoriException if the data file cannot be written
      */
     public void save(TaskList tasks) throws NoriException {
@@ -138,19 +138,19 @@ public class Storage {
         }
 
         Task task = switch (fields[0]) {
-        case "T" -> {
-            requireFieldCount(fields, 3);
-            yield new Todo(decode(fields[2]));
-        }
-        case "D" -> {
-            requireFieldCount(fields, 5);
-            yield new Deadline(decode(fields[2]), parseDate(fields[3]), parseTime(fields[4]));
-        }
-        case "E" -> {
-            requireFieldCount(fields, 5);
-            yield new Event(decode(fields[2]), decode(fields[3]), decode(fields[4]));
-        }
-        default -> throw new NoriException("A stored task has an unknown type.");
+            case "T" -> {
+                requireFieldCount(fields, 3);
+                yield new Todo(decode(fields[2]));
+            }
+            case "D" -> {
+                requireFieldCount(fields, 5);
+                yield new Deadline(decode(fields[2]), parseDate(fields[3]), parseTime(fields[4]));
+            }
+            case "E" -> {
+                requireFieldCount(fields, 5);
+                yield new Event(decode(fields[2]), decode(fields[3]), decode(fields[4]));
+            }
+            default -> throw new NoriException("A stored task has an unknown type.");
         };
 
         if (fields[1].equals("1")) {

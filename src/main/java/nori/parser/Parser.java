@@ -23,7 +23,7 @@ public class Parser {
     /**
      * Determines the operation requested by a command.
      *
-     * @param command trimmed user command
+     * @param command trimmed user command.
      * @return matching command type, or {@link CommandType#UNKNOWN}
      */
     public CommandType parseCommandType(String command) {
@@ -33,7 +33,7 @@ public class Parser {
     /**
      * Creates the task described by a todo, deadline, or event command.
      *
-     * @param command complete task-creation command
+     * @param command complete task-creation command.
      * @return task described by the command
      * @throws NoriException if a required argument is missing or invalid
      */
@@ -63,9 +63,9 @@ public class Parser {
     /**
      * Converts a one-based task number in a command to a zero-based list index.
      *
-     * @param command complete mark, unmark, or delete command
-     * @param commandWord command word whose argument is being parsed
-     * @param taskCount number of tasks currently available
+     * @param command complete mark, unmark, or delete command.
+     * @param commandWord command word whose argument is being parsed.
+     * @param taskCount number of tasks currently available.
      * @return zero-based task index
      * @throws NoriException if the task number is absent, invalid, or out of range
      */

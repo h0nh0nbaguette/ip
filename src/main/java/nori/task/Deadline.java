@@ -20,9 +20,9 @@ public class Deadline extends Task {
     /**
      * Creates a deadline with a date and time.
      *
-     * @param description description shown to the user
-     * @param by deadline date
-     * @param time deadline time
+     * @param description description shown to the user.
+     * @param by deadline date.
+     * @param time deadline time.
      */
     public Deadline(String description, LocalDate by, LocalTime time) {
         super(description);

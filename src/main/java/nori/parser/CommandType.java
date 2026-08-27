@@ -18,7 +18,7 @@ public enum CommandType {
     /**
      * Determines a command type from trimmed user input.
      *
-     * @param command trimmed command entered by the user
+     * @param command trimmed command entered by the user.
      * @return matching command type, or {@link #UNKNOWN}
      */
     public static CommandType from(String command) {
@@ -27,15 +27,15 @@ public enum CommandType {
         }
         String commandWord = command.split("\\s+", 2)[0];
         return switch (commandWord) {
-        case "bye" -> command.equals("bye") ? BYE : UNKNOWN;
-        case "list" -> command.equals("list") ? LIST : UNKNOWN;
-        case "mark" -> MARK;
-        case "unmark" -> UNMARK;
-        case "delete" -> DELETE;
-        case "todo" -> TODO;
-        case "deadline" -> DEADLINE;
-        case "event" -> EVENT;
-        default -> UNKNOWN;
+            case "bye" -> command.equals("bye") ? BYE : UNKNOWN;
+            case "list" -> command.equals("list") ? LIST : UNKNOWN;
+            case "mark" -> MARK;
+            case "unmark" -> UNMARK;
+            case "delete" -> DELETE;
+            case "todo" -> TODO;
+            case "deadline" -> DEADLINE;
+            case "event" -> EVENT;
+            default -> UNKNOWN;
         };
     }
 }
