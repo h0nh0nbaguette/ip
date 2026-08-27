@@ -103,7 +103,7 @@ public class Nori {
     /**
      * Starts a command-line Nori session.
      *
-     * @param args command-line arguments, which are not used
+     * @param args command-line arguments, which are not used.
      */
     public static void main(String[] args) {
         new Nori().run();

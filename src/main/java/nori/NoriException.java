@@ -9,7 +9,7 @@ public class NoriException extends Exception {
     /**
      * Creates a user-facing Nori error.
      *
-     * @param message explanation displayed to the user
+     * @param message explanation displayed to the user.
      */
     public NoriException(String message) {
         super(message);

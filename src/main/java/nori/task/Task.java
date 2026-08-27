@@ -10,7 +10,7 @@ public class Task {
     /**
      * Creates an incomplete task with the given description.
      *
-     * @param description description shown to the user
+     * @param description description shown to the user.
      */
     public Task(String description) {
         this.description = description;
