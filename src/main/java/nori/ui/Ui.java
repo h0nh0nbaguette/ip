@@ -45,6 +45,21 @@ public class Ui {
     /** Displays all tasks with one-based list numbers. */
     public void showTaskList(TaskList tasks) {
         System.out.println("Here are the tasks in your list:");
+        showNumberedTasks(tasks);
+    }
+
+    /**
+     * Displays tasks that match a find command.
+     *
+     * @param tasks matching tasks to display.
+     */
+    public void showMatchingTasks(TaskList tasks) {
+        System.out.println("Here are the matching tasks in your list:");
+        showNumberedTasks(tasks);
+    }
+
+    /** Displays tasks with one-based list numbers. */
+    private void showNumberedTasks(TaskList tasks) {
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println((i + 1) + "." + tasks.get(i));
         }

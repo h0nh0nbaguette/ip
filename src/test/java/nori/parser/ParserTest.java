@@ -121,4 +121,22 @@ class ParserTest {
 
         assertEquals("The task number must be a whole number.", exception.getMessage());
     }
+
+    @Test
+    void parseCommandType_findCommand_returnsFind() {
+        assertEquals(CommandType.FIND, parser.parseCommandType("find book"));
+    }
+
+    @Test
+    void parseFindKeyword_validCommand_returnsKeyword() throws NoriException {
+        assertEquals("return book", parser.parseFindKeyword("find return book"));
+    }
+
+    @Test
+    void parseFindKeyword_missingKeyword_throwsException() {
+        NoriException exception = assertThrows(NoriException.class,
+                () -> parser.parseFindKeyword("find"));
+
+        assertEquals("Please provide a keyword after find.", exception.getMessage());
+    }
 }

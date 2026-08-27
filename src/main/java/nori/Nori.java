@@ -57,6 +57,7 @@ public class Nori {
             case MARK -> updateTaskStatus(command, true);
             case UNMARK -> updateTaskStatus(command, false);
             case DELETE -> deleteTask(command);
+            case FIND -> findTasks(command);
             case TODO, DEADLINE, EVENT -> addTask(command);
             case UNKNOWN -> throw new NoriException("I don't know that command.");
             case BYE -> throw new AssertionError("bye should be handled before the command switch");
@@ -78,6 +79,12 @@ public class Nori {
         Task removedTask = tasks.delete(taskIndex);
         storage.save(tasks);
         ui.showTaskDeleted(removedTask, tasks.size());
+    }
+
+    /** Displays tasks whose descriptions contain the requested keyword. */
+    private void findTasks(String command) throws NoriException {
+        String keyword = parser.parseFindKeyword(command);
+        ui.showMatchingTasks(tasks.find(keyword));
     }
 
     /** Changes a task's completion state and persists the updated list. */
