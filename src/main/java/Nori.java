@@ -1,3 +1,4 @@
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -11,6 +12,7 @@ public class Nori {
             + "|  \\| |/ _ \\| '__| |\n"
             + "| |\\  | (_) | |  | |\n"
             + "|_| \\_|\\___/|_|  |_|\n";
+    private static final Path DATA_FILE_PATH = Path.of("data", "nori.txt");
 
     /**
      * Greets the user, manages tasks, and exits when the user enters {@code bye}.
@@ -19,12 +21,13 @@ public class Nori {
      */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        ArrayList<Task> tasks = new ArrayList<>();
+        Storage storage = new Storage(DATA_FILE_PATH);
         System.out.println(DIVIDER);
         System.out.println(BANNER);
         System.out.println("Hello! I'm Nori.");
         System.out.println("What can I do for you?");
         System.out.println(DIVIDER);
+        ArrayList<Task> tasks = loadTasks(storage);
 
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine().trim();
@@ -44,18 +47,21 @@ public class Nori {
                 case MARK -> {
                     int taskIndex = parseTaskIndex(command, "mark", tasks.size());
                     tasks.get(taskIndex).markAsDone();
+                    storage.save(tasks);
                     System.out.println("Nice! I've marked this task as done:");
                     System.out.println("  " + tasks.get(taskIndex));
                 }
                 case UNMARK -> {
                     int taskIndex = parseTaskIndex(command, "unmark", tasks.size());
                     tasks.get(taskIndex).markAsNotDone();
+                    storage.save(tasks);
                     System.out.println("OK, I've marked this task as not done yet:");
                     System.out.println("  " + tasks.get(taskIndex));
                 }
                 case DELETE -> {
                     int taskIndex = parseTaskIndex(command, "delete", tasks.size());
                     Task removedTask = tasks.remove(taskIndex);
+                    storage.save(tasks);
                     System.out.println("Noted. I've removed this task:");
                     System.out.println("  " + removedTask);
                     System.out.println("Now you have " + tasks.size() + (tasks.size() == 1
@@ -64,6 +70,7 @@ public class Nori {
                 case TODO, DEADLINE, EVENT -> {
                     Task task = parseTask(command);
                     tasks.add(task);
+                    storage.save(tasks);
                     System.out.println("Got it. I've added this task:");
                     System.out.println("  " + task);
                     System.out.println("Now you have " + tasks.size() + (tasks.size() == 1
@@ -80,6 +87,22 @@ public class Nori {
 
         System.out.println("Bye. Hope to see you again soon!");
         System.out.println(DIVIDER);
+    }
+
+    /**
+     * Loads persisted tasks, recovering with an empty list if the data cannot be read.
+     *
+     * @param storage storage used by the application
+     * @return loaded tasks, or an empty list after a loading error
+     */
+    private static ArrayList<Task> loadTasks(Storage storage) {
+        try {
+            return storage.load();
+        } catch (NoriException exception) {
+            System.out.println("OOPS!!! " + exception.getMessage());
+            System.out.println(DIVIDER);
+            return new ArrayList<>();
+        }
     }
 
     private static Task parseTask(String command) throws NoriException {
