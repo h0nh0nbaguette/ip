@@ -1,0 +1,85 @@
+.root {
+    -fx-background-color: #f5f7fb;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 14px;
+}
+
+.header {
+    -fx-background-color: #334155;
+}
+
+.title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.subtitle {
+    -fx-text-fill: #cbd5e1;
+}
+
+.chat-scroll,
+.chat-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.dialog-container {
+    -fx-background-color: #f5f7fb;
+}
+
+.dialog-box {
+    -fx-spacing: 8px;
+}
+
+.dialog-message {
+    -fx-background-radius: 12px;
+    -fx-padding: 10px 13px;
+}
+
+.user-message {
+    -fx-background-color: #dbeafe;
+    -fx-text-fill: #1e3a8a;
+}
+
+.nori-message {
+    -fx-background-color: white;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12px;
+    -fx-text-fill: #1e293b;
+}
+
+.avatar {
+    -fx-alignment: center;
+    -fx-background-color: #64748b;
+    -fx-background-radius: 16px;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-min-height: 32px;
+    -fx-min-width: 32px;
+    -fx-text-fill: white;
+}
+
+.nori-avatar {
+    -fx-background-color: #16a34a;
+}
+
+.input-bar {
+    -fx-background-color: white;
+    -fx-border-color: #e2e8f0 transparent transparent transparent;
+}
+
+.text-field {
+    -fx-background-radius: 8px;
+    -fx-padding: 10px;
+}
+
+.button {
+    -fx-background-color: #334155;
+    -fx-background-radius: 8px;
+    -fx-padding: 10px 18px;
+    -fx-text-fill: white;
+}
+
+.button:hover {
+    -fx-background-color: #475569;
+}

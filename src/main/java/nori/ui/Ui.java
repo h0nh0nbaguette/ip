@@ -26,9 +26,7 @@ public class Ui {
     /** Displays Nori's greeting. */
     public void showWelcome() {
         showDivider();
-        System.out.println(BANNER);
-        System.out.println("Hello! I'm Nori.");
-        System.out.println("What can I do for you?");
+        showResponse(BANNER + "\nHello! I'm Nori.\nWhat can I do for you?");
         showDivider();
     }
 
@@ -42,55 +40,73 @@ public class Ui {
         return scanner.nextLine().trim();
     }
 
-    /** Displays all tasks with one-based list numbers. */
-    public void showTaskList(TaskList tasks) {
-        System.out.println("Here are the tasks in your list:");
-        showNumberedTasks(tasks);
+    /** Displays a response to a command. */
+    public void showResponse(String response) {
+        System.out.println(response);
     }
 
     /**
-     * Displays tasks that match a find command.
+     * Formats all tasks with one-based list numbers.
      *
-     * @param tasks matching tasks to display.
+     * @param tasks tasks to include.
+     * @return formatted task list
      */
-    public void showMatchingTasks(TaskList tasks) {
-        System.out.println("Here are the matching tasks in your list:");
-        showNumberedTasks(tasks);
+    public String formatTaskList(TaskList tasks) {
+        return formatNumberedTasks("Here are the tasks in your list:", tasks);
     }
 
-    /** Displays tasks with one-based list numbers. */
-    private void showNumberedTasks(TaskList tasks) {
+    /**
+     * Formats tasks that match a find command.
+     *
+     * @param tasks matching tasks to include.
+     * @return formatted matching task list
+     */
+    public String formatMatchingTasks(TaskList tasks) {
+        return formatNumberedTasks("Here are the matching tasks in your list:", tasks);
+    }
+
+    /** Formats tasks with one-based list numbers after a heading. */
+    private String formatNumberedTasks(String heading, TaskList tasks) {
+        StringBuilder response = new StringBuilder(heading);
         for (int i = 0; i < tasks.size(); i++) {
-            System.out.println((i + 1) + "." + tasks.get(i));
+            response.append('\n').append(i + 1).append('.').append(tasks.get(i));
         }
+        return response.toString();
     }
 
-    /** Displays confirmation that a task was added. */
-    public void showTaskAdded(Task task, int taskCount) {
-        System.out.println("Got it. I've added this task:");
-        System.out.println("  " + task);
-        showTaskCount(taskCount);
+    /**
+     * Formats confirmation that a task was added.
+     *
+     * @return formatted confirmation
+     */
+    public String formatTaskAdded(Task task, int taskCount) {
+        return "Got it. I've added this task:\n  " + task + '\n' + formatTaskCount(taskCount);
     }
 
-    /** Displays confirmation that a task was deleted. */
-    public void showTaskDeleted(Task task, int taskCount) {
-        System.out.println("Noted. I've removed this task:");
-        System.out.println("  " + task);
-        showTaskCount(taskCount);
+    /**
+     * Formats confirmation that a task was deleted.
+     *
+     * @return formatted confirmation
+     */
+    public String formatTaskDeleted(Task task, int taskCount) {
+        return "Noted. I've removed this task:\n  " + task + '\n' + formatTaskCount(taskCount);
     }
 
-    /** Displays confirmation that a task's completion state changed. */
-    public void showTaskStatusChanged(Task task, boolean isDone) {
+    /**
+     * Formats confirmation that a task's completion state changed.
+     *
+     * @return formatted confirmation
+     */
+    public String formatTaskStatusChanged(Task task, boolean isDone) {
         String message = isDone
                 ? "Nice! I've marked this task as done:"
                 : "OK, I've marked this task as not done yet:";
-        System.out.println(message);
-        System.out.println("  " + task);
+        return message + "\n  " + task;
     }
 
-    /** Displays a recoverable error. */
-    public void showError(String message) {
-        System.out.println("OOPS!!! " + message);
+    /** Formats a recoverable error. */
+    public String formatError(String message) {
+        return "OOPS!!! " + message;
     }
 
     /** Displays the response separator. */
@@ -100,13 +116,18 @@ public class Ui {
 
     /** Displays Nori's farewell. */
     public void showGoodbye() {
-        System.out.println("Bye. Hope to see you again soon!");
+        showResponse(formatGoodbye());
         showDivider();
     }
 
-    /** Displays the task count with correct singular or plural wording. */
-    private void showTaskCount(int taskCount) {
-        System.out.println("Now you have " + taskCount + (taskCount == 1
-                ? " task in the list." : " tasks in the list."));
+    /** Returns Nori's farewell. */
+    public String formatGoodbye() {
+        return "Bye. Hope to see you again soon!";
+    }
+
+    /** Formats the task count with correct singular or plural wording. */
+    private String formatTaskCount(int taskCount) {
+        return "Now you have " + taskCount + (taskCount == 1
+                ? " task in the list." : " tasks in the list.");
     }
 }
