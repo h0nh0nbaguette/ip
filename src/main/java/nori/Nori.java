@@ -22,8 +22,13 @@ public class Nori {
 
     /** Creates Nori with its command-line interface and default data file. */
     public Nori() {
+        this(DATA_FILE_PATH);
+    }
+
+    /** Creates Nori with a command-line interface and the given data file. */
+    Nori(Path dataFilePath) {
         this.ui = new Ui();
-        this.storage = new Storage(DATA_FILE_PATH);
+        this.storage = new Storage(dataFilePath);
         this.parser = new Parser();
     }
 
@@ -38,62 +43,76 @@ public class Nori {
             if (commandType == CommandType.BYE) {
                 break;
             }
-            try {
-                executeCommand(command, commandType);
-            } catch (NoriException exception) {
-                ui.showError(exception.getMessage());
-            }
+            ui.showResponse(getResponse(command));
             ui.showDivider();
         }
 
         ui.showGoodbye();
     }
 
-    /** Executes one parsed user command. */
-    private void executeCommand(String command, CommandType commandType) throws NoriException {
-        switch (commandType) {
+    /**
+     * Executes a command and returns Nori's response for display by any user interface.
+     *
+     * @param command complete user command.
+     * @return response produced by the command
+     */
+    public String getResponse(String command) {
+        if (tasks == null) {
+            tasks = loadTasks();
+        }
+        String trimmedCommand = command.trim();
+        CommandType commandType = parser.parseCommandType(trimmedCommand);
+        try {
+            return executeCommand(trimmedCommand, commandType);
+        } catch (NoriException exception) {
+            return ui.formatError(exception.getMessage());
+        }
+    }
+
+    /** Executes one parsed user command and returns its response. */
+    private String executeCommand(String command, CommandType commandType) throws NoriException {
+        return switch (commandType) {
             case EMPTY -> throw new NoriException("Please enter a command.");
-            case LIST -> ui.showTaskList(tasks);
+            case LIST -> ui.formatTaskList(tasks);
             case MARK -> updateTaskStatus(command, true);
             case UNMARK -> updateTaskStatus(command, false);
             case DELETE -> deleteTask(command);
             case FIND -> findTasks(command);
             case TODO, DEADLINE, EVENT -> addTask(command);
             case UNKNOWN -> throw new NoriException("I don't know that command.");
-            case BYE -> throw new AssertionError("bye should be handled before the command switch");
-            default -> throw new AssertionError("Every command type should be handled");
-        }
+            case BYE -> ui.formatGoodbye();
+        };
     }
 
     /** Adds a task described by a user command and persists the updated list. */
-    private void addTask(String command) throws NoriException {
+    private String addTask(String command) throws NoriException {
         Task task = parser.parseTask(command);
         tasks.add(task);
         storage.save(tasks);
-        ui.showTaskAdded(task, tasks.size());
+        return ui.formatTaskAdded(task, tasks.size());
     }
 
     /** Deletes the selected task and persists the updated list. */
-    private void deleteTask(String command) throws NoriException {
+    private String deleteTask(String command) throws NoriException {
         int taskIndex = parser.parseTaskIndex(command, "delete", tasks.size());
         Task removedTask = tasks.delete(taskIndex);
         storage.save(tasks);
-        ui.showTaskDeleted(removedTask, tasks.size());
+        return ui.formatTaskDeleted(removedTask, tasks.size());
     }
 
     /** Displays tasks whose descriptions contain the requested keyword. */
-    private void findTasks(String command) throws NoriException {
+    private String findTasks(String command) throws NoriException {
         String keyword = parser.parseFindKeyword(command);
-        ui.showMatchingTasks(tasks.find(keyword));
+        return ui.formatMatchingTasks(tasks.find(keyword));
     }
 
     /** Changes a task's completion state and persists the updated list. */
-    private void updateTaskStatus(String command, boolean isDone) throws NoriException {
+    private String updateTaskStatus(String command, boolean isDone) throws NoriException {
         String commandWord = isDone ? "mark" : "unmark";
         int taskIndex = parser.parseTaskIndex(command, commandWord, tasks.size());
         Task task = isDone ? tasks.mark(taskIndex) : tasks.unmark(taskIndex);
         storage.save(tasks);
-        ui.showTaskStatusChanged(task, isDone);
+        return ui.formatTaskStatusChanged(task, isDone);
     }
 
     /** Loads persisted tasks, recovering with an empty list after a loading error. */
@@ -101,7 +120,7 @@ public class Nori {
         try {
             return storage.load();
         } catch (NoriException exception) {
-            ui.showError(exception.getMessage());
+            ui.showResponse(ui.formatError(exception.getMessage()));
             ui.showDivider();
             return new TaskList();
         }
