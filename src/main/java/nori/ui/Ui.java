@@ -26,7 +26,7 @@ public class Ui {
     /** Displays Nori's greeting. */
     public void showWelcome() {
         showDivider();
-        showResponse(BANNER + "\nHello! I'm Nori.\nWhat can I do for you?");
+        showResponse(formatLines(BANNER, "Hello! I'm Nori.", "What can I do for you?"));
         showDivider();
     }
 
@@ -80,7 +80,10 @@ public class Ui {
      * @return formatted confirmation
      */
     public String formatTaskAdded(Task task, int taskCount) {
-        return "Got it. I've added this task:\n  " + task + '\n' + formatTaskCount(taskCount);
+        return formatLines(
+                "Got it. I've added this task:",
+                "  " + task,
+                formatTaskCount(taskCount));
     }
 
     /**
@@ -89,7 +92,10 @@ public class Ui {
      * @return formatted confirmation
      */
     public String formatTaskDeleted(Task task, int taskCount) {
-        return "Noted. I've removed this task:\n  " + task + '\n' + formatTaskCount(taskCount);
+        return formatLines(
+                "Noted. I've removed this task:",
+                "  " + task,
+                formatTaskCount(taskCount));
     }
 
     /**
@@ -101,7 +107,7 @@ public class Ui {
         String message = isDone
                 ? "Nice! I've marked this task as done:"
                 : "OK, I've marked this task as not done yet:";
-        return message + "\n  " + task;
+        return formatLines(message, "  " + task);
     }
 
     /** Formats a recoverable error. */
@@ -129,5 +135,10 @@ public class Ui {
     private String formatTaskCount(int taskCount) {
         return "Now you have " + taskCount + (taskCount == 1
                 ? " task in the list." : " tasks in the list.");
+    }
+
+    /** Combines any number of response lines with newline separators. */
+    private String formatLines(String... lines) {
+        return String.join("\n", lines);
     }
 }
