@@ -41,64 +41,64 @@ class ParserTest {
 
     @Test
     void parseTask_invalidDeadline_throwsException() {
-        NoriException exception = assertThrows(NoriException.class,
-                () -> parser.parseTask("deadline return book /by 31/2/2019 1800"));
+        NoriException exception = assertThrows(NoriException.class, () ->
+                parser.parseTask("deadline return book /by 31/2/2019 1800"));
 
         assertEquals(DEADLINE_FORMAT_ERROR, exception.getMessage());
     }
 
     @Test
     void parseTask_deadlineWithoutArguments_throwsException() {
-        NoriException exception = assertThrows(NoriException.class,
-                () -> parser.parseTask("deadline"));
+        NoriException exception = assertThrows(NoriException.class, () ->
+                parser.parseTask("deadline"));
 
         assertEquals(DEADLINE_USAGE_ERROR, exception.getMessage());
     }
 
     @Test
     void parseTask_deadlineWithoutDescription_throwsException() {
-        NoriException exception = assertThrows(NoriException.class,
-                () -> parser.parseTask("deadline /by 2019-12-03 1800"));
+        NoriException exception = assertThrows(NoriException.class, () ->
+                parser.parseTask("deadline /by 2019-12-03 1800"));
 
         assertEquals("A deadline needs both a description and /by value.", exception.getMessage());
     }
 
     @Test
     void parseTask_deadlineWithoutSlashBeforeBy_throwsException() {
-        NoriException exception = assertThrows(NoriException.class,
-                () -> parser.parseTask("deadline return book by 2019-12-03 1800"));
+        NoriException exception = assertThrows(NoriException.class, () ->
+                parser.parseTask("deadline return book by 2019-12-03 1800"));
 
         assertEquals(DEADLINE_USAGE_ERROR, exception.getMessage());
     }
 
     @Test
     void parseTask_deadlineWithoutTime_throwsException() {
-        NoriException exception = assertThrows(NoriException.class,
-                () -> parser.parseTask("deadline return book /by 2019-12-03"));
+        NoriException exception = assertThrows(NoriException.class, () ->
+                parser.parseTask("deadline return book /by 2019-12-03"));
 
         assertEquals(DEADLINE_FORMAT_ERROR, exception.getMessage());
     }
 
     @Test
     void parseTask_deadlineWithExtraArgument_throwsException() {
-        NoriException exception = assertThrows(NoriException.class,
-                () -> parser.parseTask("deadline return book /by 2019-12-03 1800 extra"));
+        NoriException exception = assertThrows(NoriException.class, () ->
+                parser.parseTask("deadline return book /by 2019-12-03 1800 extra"));
 
         assertEquals(DEADLINE_FORMAT_ERROR, exception.getMessage());
     }
 
     @Test
     void parseTask_deadlineWithInvalidHour_throwsException() {
-        NoriException exception = assertThrows(NoriException.class,
-                () -> parser.parseTask("deadline return book /by 2019-12-03 2500"));
+        NoriException exception = assertThrows(NoriException.class, () ->
+                parser.parseTask("deadline return book /by 2019-12-03 2500"));
 
         assertEquals(DEADLINE_FORMAT_ERROR, exception.getMessage());
     }
 
     @Test
     void parseTask_deadlineWithInvalidMinute_throwsException() {
-        NoriException exception = assertThrows(NoriException.class,
-                () -> parser.parseTask("deadline return book /by 2019-12-03 1860"));
+        NoriException exception = assertThrows(NoriException.class, () ->
+                parser.parseTask("deadline return book /by 2019-12-03 1860"));
 
         assertEquals(DEADLINE_FORMAT_ERROR, exception.getMessage());
     }
@@ -110,14 +110,14 @@ class ParserTest {
 
     @Test
     void parseTaskIndex_outOfRangeNumber_throwsException() {
-        assertThrows(NoriException.class,
-                () -> parser.parseTaskIndex("delete 4", "delete", 3));
+        assertThrows(NoriException.class, () ->
+                parser.parseTaskIndex("delete 4", "delete", 3));
     }
 
     @Test
     void parseTaskIndex_multipleNumbers_throwsException() {
-        NoriException exception = assertThrows(NoriException.class,
-                () -> parser.parseTaskIndex("mark 1 2", "mark", 3));
+        NoriException exception = assertThrows(NoriException.class, () ->
+                parser.parseTaskIndex("mark 1 2", "mark", 3));
 
         assertEquals("The task number must be a whole number.", exception.getMessage());
     }
@@ -134,8 +134,8 @@ class ParserTest {
 
     @Test
     void parseFindKeyword_missingKeyword_throwsException() {
-        NoriException exception = assertThrows(NoriException.class,
-                () -> parser.parseFindKeyword("find"));
+        NoriException exception = assertThrows(NoriException.class, () ->
+                parser.parseFindKeyword("find"));
 
         assertEquals("Please provide a keyword after find.", exception.getMessage());
     }
