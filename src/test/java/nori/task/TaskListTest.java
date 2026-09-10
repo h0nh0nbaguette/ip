@@ -1,10 +1,25 @@
 package nori.task;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 class TaskListTest {
+    @Test
+    void add_nullTask_throwsAssertionError() {
+        TaskList tasks = new TaskList();
+
+        assertThrows(AssertionError.class, () -> tasks.add(null));
+    }
+
+    @Test
+    void get_invalidIndex_throwsAssertionError() {
+        TaskList tasks = new TaskList();
+
+        assertThrows(AssertionError.class, () -> tasks.get(0));
+    }
+
     @Test
     void find_matchingDescriptions_returnsMatchesInOrder() {
         TaskList tasks = new TaskList();
