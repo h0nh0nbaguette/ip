@@ -12,6 +12,13 @@ class NoriTest {
     private Path temporaryDirectory;
 
     @Test
+    void getWelcomeMessage_returnsInlineWelcome() {
+        Nori nori = new Nori(temporaryDirectory.resolve("nori.txt"));
+
+        assertEquals("Hello! I'm Nori. What can I do for you?", nori.getWelcomeMessage());
+    }
+
+    @Test
     void getResponse_addAndListTask_returnsExpectedResponses() {
         Nori nori = new Nori(temporaryDirectory.resolve("nori.txt"));
 

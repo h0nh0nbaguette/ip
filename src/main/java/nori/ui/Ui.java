@@ -10,6 +10,8 @@ import nori.task.TaskList;
  */
 public class Ui {
     private static final String DIVIDER = "____________________________________________________________";
+    private static final String WELCOME_GREETING = "Hello! I'm Nori.";
+    private static final String WELCOME_PROMPT = "What can I do for you?";
     private static final String BANNER = " _   _            _ \n"
             + "| \\ | | ___  _ __(_) \n"
             + "|  \\| |/ _ \\| '__| |\n"
@@ -26,8 +28,18 @@ public class Ui {
     /** Displays Nori's greeting. */
     public void showWelcome() {
         showDivider();
-        showResponse(formatLines(BANNER, "Hello! I'm Nori.", "What can I do for you?"));
+        showResponse(formatLines(BANNER, formatWelcome()));
         showDivider();
+    }
+
+    /** Returns Nori's welcome message with each part on a separate line. */
+    public String formatWelcome() {
+        return formatLines(WELCOME_GREETING, WELCOME_PROMPT);
+    }
+
+    /** Returns Nori's welcome message on one line. */
+    public String formatInlineWelcome() {
+        return WELCOME_GREETING + " " + WELCOME_PROMPT;
     }
 
     /** Returns whether another command is available from the input stream. */
