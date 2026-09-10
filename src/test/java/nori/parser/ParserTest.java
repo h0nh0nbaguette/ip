@@ -128,6 +128,16 @@ class ParserTest {
     }
 
     @Test
+    void parseCommandType_helpCommand_returnsHelp() {
+        assertEquals(CommandType.HELP, parser.parseCommandType("help"));
+    }
+
+    @Test
+    void parseCommandType_helpWithArguments_returnsUnknown() {
+        assertEquals(CommandType.UNKNOWN, parser.parseCommandType("help commands"));
+    }
+
+    @Test
     void parseFindKeyword_validCommand_returnsKeyword() throws NoriException {
         assertEquals("return book", parser.parseFindKeyword("find return book"));
     }

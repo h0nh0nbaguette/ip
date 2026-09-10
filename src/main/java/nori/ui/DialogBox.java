@@ -10,7 +10,7 @@ import javafx.scene.layout.Region;
  * Displays one user or Nori message in the conversation.
  */
 public class DialogBox extends HBox {
-    private static final double MESSAGE_MAX_WIDTH = 340;
+    private static final double MESSAGE_MAX_WIDTH = 400;
 
     private DialogBox(String text, String speaker, boolean isUser) {
         Label avatar = new Label(speaker);
