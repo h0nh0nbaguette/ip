@@ -22,21 +22,26 @@ public class TaskList implements Iterable<Task> {
      * @param tasks initial tasks copied into the list.
      */
     public TaskList(List<Task> tasks) {
+        assert tasks != null : "Initial task list must not be null";
+        assert !tasks.contains(null) : "Initial task list must not contain null";
         this.tasks = new ArrayList<>(tasks);
     }
 
     /** Adds a task to the end of the list. */
     public void add(Task task) {
+        assert task != null : "Task to add must not be null";
         tasks.add(task);
     }
 
     /** Removes and returns the task at an index. */
     public Task delete(int index) {
+        assert isValidIndex(index) : "Task index must be valid";
         return tasks.remove(index);
     }
 
     /** Marks and returns the task at an index. */
     public Task mark(int index) {
+        assert isValidIndex(index) : "Task index must be valid";
         Task task = tasks.get(index);
         task.markAsDone();
         return task;
@@ -44,6 +49,7 @@ public class TaskList implements Iterable<Task> {
 
     /** Unmarks and returns the task at an index. */
     public Task unmark(int index) {
+        assert isValidIndex(index) : "Task index must be valid";
         Task task = tasks.get(index);
         task.markAsNotDone();
         return task;
@@ -51,6 +57,7 @@ public class TaskList implements Iterable<Task> {
 
     /** Returns the task at an index. */
     public Task get(int index) {
+        assert isValidIndex(index) : "Task index must be valid";
         return tasks.get(index);
     }
 
@@ -79,5 +86,10 @@ public class TaskList implements Iterable<Task> {
     @Override
     public Iterator<Task> iterator() {
         return Collections.unmodifiableList(tasks).iterator();
+    }
+
+    /** Returns whether an index identifies a task in the list. */
+    private boolean isValidIndex(int index) {
+        return index >= 0 && index < tasks.size();
     }
 }
