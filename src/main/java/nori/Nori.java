@@ -69,6 +69,11 @@ public class Nori {
         }
     }
 
+    /** Returns the welcome message for graphical interfaces. */
+    public String getWelcomeMessage() {
+        return ui.formatInlineWelcome();
+    }
+
     /** Executes one parsed user command and returns its response. */
     private String executeCommand(String command, CommandType commandType) throws NoriException {
         return switch (commandType) {
