@@ -38,7 +38,7 @@ public class MainWindow {
     public void setNori(Nori nori) {
         this.nori = nori;
         dialogContainer.getChildren().add(
-                DialogBox.createNoriDialog("Hello! I'm Nori. What can I do for you?"));
+                DialogBox.createNoriDialog(nori.getWelcomeMessage()));
         Platform.runLater(userInput::requestFocus);
     }
 
