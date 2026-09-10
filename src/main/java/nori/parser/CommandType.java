@@ -10,6 +10,7 @@ public enum CommandType {
     UNMARK,
     DELETE,
     FIND,
+    HELP,
     TODO,
     DEADLINE,
     EVENT,
@@ -34,6 +35,7 @@ public enum CommandType {
             case "unmark" -> UNMARK;
             case "delete" -> DELETE;
             case "find" -> FIND;
+            case "help" -> command.equals("help") ? HELP : UNKNOWN;
             case "todo" -> TODO;
             case "deadline" -> DEADLINE;
             case "event" -> EVENT;

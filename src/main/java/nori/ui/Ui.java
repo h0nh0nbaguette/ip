@@ -12,6 +12,27 @@ public class Ui {
     private static final String DIVIDER = "____________________________________________________________";
     private static final String WELCOME_GREETING = "Hello! I'm Nori.";
     private static final String WELCOME_PROMPT = "What can I do for you?";
+    private static final String HELP_MESSAGE = String.join("\n",
+            "Nori command guide",
+            "",
+            "ADD TASKS",
+            "  • todo DESCRIPTION",
+            "  • deadline DESCRIPTION /by DATE_TIME",
+            "  • event DESCRIPTION /from START /to END",
+            "",
+            "MANAGE TASKS",
+            "  • list - Show all tasks",
+            "  • mark TASK_NUMBER - Mark as done",
+            "  • unmark TASK_NUMBER - Mark as not done",
+            "  • delete TASK_NUMBER - Remove a task",
+            "  • find KEYWORD - Search descriptions",
+            "",
+            "GENERAL",
+            "  • help - Show this guide",
+            "  • bye - Exit Nori",
+            "",
+            "DATE_TIME",
+            "  yyyy-MM-dd HHmm  or  d/M/yyyy HHmm");
     private static final String BANNER = " _   _            _ \n"
             + "| \\ | | ___  _ __(_) \n"
             + "|  \\| |/ _ \\| '__| |\n"
@@ -40,6 +61,11 @@ public class Ui {
     /** Returns Nori's welcome message on one line. */
     public String formatInlineWelcome() {
         return WELCOME_GREETING + " " + WELCOME_PROMPT;
+    }
+
+    /** Returns guidance for all supported commands. */
+    public String formatHelp() {
+        return HELP_MESSAGE;
     }
 
     /** Returns whether another command is available from the input stream. */

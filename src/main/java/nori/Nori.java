@@ -83,6 +83,7 @@ public class Nori {
             case UNMARK -> updateTaskStatus(command, false);
             case DELETE -> deleteTask(command);
             case FIND -> findTasks(command);
+            case HELP -> ui.formatHelp();
             case TODO, DEADLINE, EVENT -> addTask(command);
             case UNKNOWN -> throw new NoriException("I don't know that command.");
             case BYE -> ui.formatGoodbye();

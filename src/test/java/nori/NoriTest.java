@@ -19,6 +19,32 @@ class NoriTest {
     }
 
     @Test
+    void getResponse_helpCommand_returnsCommandSummary() {
+        Nori nori = new Nori(temporaryDirectory.resolve("nori.txt"));
+
+        assertEquals("Nori command guide\n"
+                + "\n"
+                + "ADD TASKS\n"
+                + "  • todo DESCRIPTION\n"
+                + "  • deadline DESCRIPTION /by DATE_TIME\n"
+                + "  • event DESCRIPTION /from START /to END\n"
+                + "\n"
+                + "MANAGE TASKS\n"
+                + "  • list - Show all tasks\n"
+                + "  • mark TASK_NUMBER - Mark as done\n"
+                + "  • unmark TASK_NUMBER - Mark as not done\n"
+                + "  • delete TASK_NUMBER - Remove a task\n"
+                + "  • find KEYWORD - Search descriptions\n"
+                + "\n"
+                + "GENERAL\n"
+                + "  • help - Show this guide\n"
+                + "  • bye - Exit Nori\n"
+                + "\n"
+                + "DATE_TIME\n"
+                + "  yyyy-MM-dd HHmm  or  d/M/yyyy HHmm", nori.getResponse("help"));
+    }
+
+    @Test
     void getResponse_addAndListTask_returnsExpectedResponses() {
         Nori nori = new Nori(temporaryDirectory.resolve("nori.txt"));
 
