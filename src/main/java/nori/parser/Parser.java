@@ -38,6 +38,8 @@ public class Parser {
      * @throws NoriException if a required argument is missing or invalid
      */
     public Task parseTask(String command) throws NoriException {
+        // Match CommandType's whitespace handling without changing spaces inside descriptions.
+        command = command.trim().replaceFirst("\\s+", " ");
         if (command.equals("todo")) {
             throw new NoriException("The description of a todo cannot be empty.");
         }
@@ -136,10 +138,10 @@ public class Parser {
     private Event parseEvent(String command) throws NoriException {
         int fromIndex = command.indexOf(" /from ");
         int toIndex = command.indexOf(" /to ");
-        if (fromIndex < 0 || toIndex < 0 || toIndex <= fromIndex) {
+        if (fromIndex < 0 || toIndex < fromIndex + 7) {
             throw new NoriException("Use: event DESCRIPTION /from START /to END");
         }
-        String description = command.substring(6, fromIndex).trim();
+        String description = fromIndex < 6 ? "" : command.substring(6, fromIndex).trim();
         String from = command.substring(fromIndex + 7, toIndex).trim();
         String to = command.substring(toIndex + 5).trim();
         if (description.isEmpty() || from.isEmpty() || to.isEmpty()) {

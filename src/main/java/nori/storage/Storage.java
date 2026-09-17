@@ -196,7 +196,11 @@ public class Storage {
     private String decode(String value) throws NoriException {
         try {
             byte[] bytes = Base64.getUrlDecoder().decode(value);
-            return new String(bytes, StandardCharsets.UTF_8);
+            String decoded = new String(bytes, StandardCharsets.UTF_8);
+            if (decoded.isBlank()) {
+                throw new NoriException("A stored task contains an empty value.");
+            }
+            return decoded;
         } catch (IllegalArgumentException exception) {
             throw new NoriException("A stored task contains invalid text.");
         }

@@ -35,7 +35,6 @@ public class Nori {
     /** Starts Nori and processes commands until the user enters {@code bye}. */
     public void run() {
         ui.showWelcome();
-        tasks = loadTasks();
 
         while (ui.hasNextCommand()) {
             String command = ui.readCommand();
@@ -57,16 +56,37 @@ public class Nori {
      * @return response produced by the command
      */
     public String getResponse(String command) {
-        if (tasks == null) {
-            tasks = loadTasks();
-        }
+        return getReply(command).message();
+    }
+
+    /**
+     * Executes a command, retaining its outcome for accessible GUI error feedback.
+     * Failed commands discard cached tasks so an unsaved change cannot appear successful later.
+     *
+     * @param command complete user command.
+     * @return response text and whether an error occurred
+     */
+    public Reply getReply(String command) {
         String trimmedCommand = command.trim();
         CommandType commandType = parser.parseCommandType(trimmedCommand);
         try {
-            return executeCommand(trimmedCommand, commandType);
+            // Help and exit remain available even if the data file needs repair.
+            if (tasks == null && needsTasks(commandType)) {
+                tasks = storage.load();
+            }
+            return new Reply(executeCommand(trimmedCommand, commandType), false);
         } catch (NoriException exception) {
-            return ui.formatError(exception.getMessage());
+            tasks = null;
+            return new Reply(ui.formatError(exception.getMessage()), true);
         }
+    }
+
+    /** Returns whether the command needs access to persisted tasks. */
+    private boolean needsTasks(CommandType commandType) {
+        return switch (commandType) {
+            case HELP, BYE, EMPTY, UNKNOWN -> false;
+            default -> true;
+        };
     }
 
     /** Returns the welcome message for graphical interfaces. */
@@ -119,17 +139,6 @@ public class Nori {
         Task task = isDone ? tasks.mark(taskIndex) : tasks.unmark(taskIndex);
         storage.save(tasks);
         return ui.formatTaskStatusChanged(task, isDone);
-    }
-
-    /** Loads persisted tasks, recovering with an empty list after a loading error. */
-    private TaskList loadTasks() {
-        try {
-            return storage.load();
-        } catch (NoriException exception) {
-            ui.showResponse(ui.formatError(exception.getMessage()));
-            ui.showDivider();
-            return new TaskList();
-        }
     }
 
     /**
