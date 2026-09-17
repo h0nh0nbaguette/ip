@@ -26,6 +26,23 @@ class StorageTest {
     private Path tempDirectory;
 
     @Test
+    void load_blankDescription_reportsInvalidData() throws IOException {
+        Storage storage = new Storage(writeData("T | 0 | " + encode("   ")));
+
+        NoriException exception = assertThrows(NoriException.class, storage::load);
+
+        assertEquals("The task data on line 1 is invalid.", exception.getMessage());
+    }
+
+    @Test
+    void load_blankEventEndpoint_reportsInvalidData() throws IOException {
+        Storage storage = new Storage(writeData(String.join(" | ",
+                "E", "0", encode("meeting"), encode(""), encode("Tuesday"))));
+
+        assertThrows(NoriException.class, storage::load);
+    }
+
+    @Test
     void saveAndLoad_mixedTasks_preservesData() throws NoriException, IOException {
         Path dataFile = tempDirectory.resolve("data").resolve("nori.txt");
         Storage storage = new Storage(dataFile);

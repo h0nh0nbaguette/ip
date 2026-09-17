@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import nori.NoriException;
 import nori.task.Deadline;
+import nori.task.Event;
 
 class ParserTest {
     private static final String DEADLINE_FORMAT_ERROR =
@@ -19,6 +20,35 @@ class ParserTest {
             "Use: deadline DESCRIPTION /by yyyy-MM-dd HHmm or d/M/yyyy HHmm";
 
     private final Parser parser = new Parser();
+
+    @Test
+    void parseTask_eventWithMissingFields_throwsNoriException() {
+        String[] commands = {"event /from Monday /to Tuesday", "event meeting /from /to Tuesday",
+            "event meeting /from Monday /to", "event meeting /to Tuesday /from Monday"};
+        for (String command : commands) {
+            assertThrows(NoriException.class, () -> parser.parseTask(command), command);
+        }
+    }
+
+    @Test
+    void parseTask_eventWithFreeText_preservesBothEndpoints() throws NoriException {
+        Event event = assertInstanceOf(Event.class,
+                parser.parseTask("event team meeting /from Friday 2pm /to Friday 3pm"));
+
+        assertEquals("team meeting", event.getDescription());
+        assertEquals("Friday 2pm", event.getFrom());
+        assertEquals("Friday 3pm", event.getTo());
+    }
+
+    @Test
+    void parseTask_leapDay_acceptsOnlyLeapYears() throws NoriException {
+        Deadline deadline = assertInstanceOf(Deadline.class,
+                parser.parseTask("deadline leap day /by 2028-02-29 0000"));
+
+        assertEquals(LocalDate.of(2028, 2, 29), deadline.getBy());
+        assertEquals(LocalTime.MIDNIGHT, deadline.getTime());
+        assertThrows(NoriException.class, () -> parser.parseTask("deadline invalid /by 2026-02-29 0000"));
+    }
 
     @Test
     void parseTask_isoDeadline_returnsDeadline() throws NoriException {
