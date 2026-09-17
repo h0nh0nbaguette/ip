@@ -90,6 +90,9 @@ public class Ui {
      * @return formatted task list
      */
     public String formatTaskList(TaskList tasks) {
+        if (tasks.size() == 0) {
+            return "Your list is empty. Start with: todo read a book";
+        }
         return formatNumberedTasks("Here are the tasks in your list:", tasks);
     }
 
@@ -100,6 +103,9 @@ public class Ui {
      * @return formatted matching task list
      */
     public String formatMatchingTasks(TaskList tasks) {
+        if (tasks.size() == 0) {
+            return "No matching tasks. Search is case-sensitive; try another keyword.";
+        }
         return formatNumberedTasks("Here are the matching tasks in your list:", tasks);
     }
 
